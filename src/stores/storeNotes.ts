@@ -1,28 +1,28 @@
 import { defineStore } from "pinia";
 import type { INote } from "@/types/NoteTypes";
 import { v4 as uuidv4 } from "uuid";
+import { db } from "@/includes/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 /** */
 export const useStoreNotes = defineStore("storeNotes", {
   state: () => {
     return {
-      notes: [
-        {
-          id: "id1",
-          content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
-        },
-        {
-          id: "id2",
-          content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
-        },
-        {
-          id: "id3",
-          content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
-        },
-      ] as INote[],
+      notes: [] as INote[],
     };
   },
   actions: {
+    async getNotesFromFireStore() {
+      console.log("getNotesFromFireStore");
+      const querySnapshot = await getDocs(collection(db, "notes"));
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        this.notes.push({
+          id: doc.id,
+          content: doc.data().content,
+        });
+      });
+    },
     addNote(content: INote["content"]): void {
       const newOne = {
         id: uuidv4(),
