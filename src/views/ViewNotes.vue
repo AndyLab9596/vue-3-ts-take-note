@@ -25,7 +25,7 @@
       </div>
     </div>
     <SingleNote
-      v-for="note in notes"
+      v-for="note in storeNotes.notes"
       :key="note.id"
       :note="note"
       @delete-note="handleDeleteNote"
@@ -38,24 +38,10 @@ import { ref } from "vue";
 import type { INote } from "@/types/NoteTypes";
 import { v4 as uuidv4 } from "uuid";
 import SingleNote from "@/components/Notes/SingleNote.vue";
+import { useStoreNotes } from "@/stores/storeNotes";
 
-/**
- * Notes
- */
-const notes = ref<INote[]>([
-  {
-    id: "id1",
-    content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
-  },
-  {
-    id: "id2",
-    content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
-  },
-  {
-    id: "id3",
-    content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
-  },
-]);
+/**Store */
+const storeNotes = useStoreNotes();
 
 const newNote = ref("");
 const newNoteRef = ref<HTMLTextAreaElement | null>(null);
@@ -64,15 +50,13 @@ const addNote = () => {
     id: uuidv4(),
     content: newNote.value,
   };
-  notes.value.unshift(newOne);
+  storeNotes.addNote(newOne);
   newNote.value = "";
   newNoteRef.value?.focus();
 };
 
 const handleDeleteNote = (id: INote["id"]) => {
-  const deletedNoteIndex = notes.value.findIndex((note) => note.id === id);
-  if (deletedNoteIndex < 0) return;
-  notes.value.splice(deletedNoteIndex, 1);
+  storeNotes.deleteNote(id);
 };
 </script>
 
