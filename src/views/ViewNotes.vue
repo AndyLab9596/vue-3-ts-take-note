@@ -3,26 +3,31 @@
     <div class="card has-background-success-dark p-4 mb-5">
       <div class="field">
         <div class="control">
-          <textarea class="textarea" placeholder="Add a new note"></textarea>
+          <textarea
+            class="textarea"
+            placeholder="Add a new note"
+            v-model="newNote"
+          ></textarea>
         </div>
       </div>
 
       <div class="field is-grouped is-grouped-right">
         <div class="control">
-          <button class="button is-link has-background-success">
+          <button
+            class="button is-link has-background-success"
+            @click="addNote"
+            :disabled="!newNote"
+          >
             Add New Note
           </button>
         </div>
       </div>
     </div>
 
-    <div class="card mb-4" v-for="i in 3" :key="i">
+    <div class="card mb-4" v-for="note in notes" :key="note.id">
       <div class="card-content">
         <div class="content">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Nisi illum
-          facilis neque quisquam nobis, possimus suscipit, non ducimus impedit
-          ipsam laudantium vel quae iste sed beatae. Error repudiandae enim
-          minima!
+          {{ note.content }}
         </div>
       </div>
       <footer class="card-footer">
@@ -33,6 +38,38 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref } from "vue";
+import type { INote } from "@/types/NoteTypes";
+import { v4 as uuidv4 } from "uuid";
+
+/**
+ * Notes
+ */
+const notes = ref<INote[]>([
+  {
+    id: "id1",
+    content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
+  },
+  {
+    id: "id2",
+    content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
+  },
+  {
+    id: "id3",
+    content: "Lorem ipsum dolor sit, amet consectetur adipisicing elit.",
+  },
+]);
+
+const newNote = ref("");
+const addNote = () => {
+  const newOne = {
+    id: uuidv4(),
+    content: newNote.value,
+  };
+  notes.value.push(newOne);
+  newNote.value = "";
+};
+</script>
 
 <style scoped></style>
