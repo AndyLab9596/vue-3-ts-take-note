@@ -1,6 +1,12 @@
 import { notesCollection } from "@/includes/firebase";
 import type { INote } from "@/types/NoteTypes";
-import { deleteDoc, doc, onSnapshot, setDoc } from "firebase/firestore";
+import {
+  deleteDoc,
+  doc,
+  onSnapshot,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
 import { defineStore } from "pinia";
 
 /** */
@@ -31,10 +37,10 @@ export const useStoreNotes = defineStore("storeNotes", {
     async deleteNote(id: INote["id"]) {
       await deleteDoc(doc(notesCollection, id));
     },
-    updateNote({ id, content }: INote): void {
-      const updatedNoteIndex = this.notes.findIndex((note) => note.id === id);
-      if (updatedNoteIndex < 0) return;
-      this.notes[updatedNoteIndex].content = content;
+    async updateNote({ id, content }: INote) {
+      await updateDoc(doc(notesCollection, id), {
+        content,
+      });
     },
   },
   getters: {
