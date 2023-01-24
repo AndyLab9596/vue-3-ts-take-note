@@ -1,8 +1,7 @@
-import { db } from "@/includes/firebase";
+import { notesCollection } from "@/includes/firebase";
 import type { INote } from "@/types/NoteTypes";
-import { collection, onSnapshot } from "firebase/firestore";
+import { deleteDoc, doc, onSnapshot, setDoc } from "firebase/firestore";
 import { defineStore } from "pinia";
-import { v4 as uuidv4 } from "uuid";
 
 /** */
 export const useStoreNotes = defineStore("storeNotes", {
@@ -13,7 +12,7 @@ export const useStoreNotes = defineStore("storeNotes", {
   },
   actions: {
     async getNotesFromFireStore() {
-      onSnapshot(collection(db, "notes"), (querySnapshot) => {
+      onSnapshot(notesCollection, (querySnapshot) => {
         const notes: INote[] = [];
         querySnapshot.forEach((doc) => {
           notes.push({
@@ -24,17 +23,13 @@ export const useStoreNotes = defineStore("storeNotes", {
         this.notes = notes;
       });
     },
-    addNote(content: INote["content"]): void {
-      const newOne = {
-        id: uuidv4(),
+    async addNote(content: INote["content"]): Promise<void> {
+      await setDoc(doc(notesCollection, new Date().getTime().toString()), {
         content,
-      };
-      this.notes.unshift(newOne);
+      });
     },
-    deleteNote(id: INote["id"]): void {
-      const deletedNoteIndex = this.notes.findIndex((note) => note.id === id);
-      if (deletedNoteIndex < 0) return;
-      this.notes.splice(deletedNoteIndex, 1);
+    async deleteNote(id: INote["id"]) {
+      await deleteDoc(doc(notesCollection, id));
     },
     updateNote({ id, content }: INote): void {
       const updatedNoteIndex = this.notes.findIndex((note) => note.id === id);
