@@ -2,7 +2,13 @@
   <nav class="navbar is-success" role="navigation" aria-label="main navigation">
     <div class="container is-max-desktop px-2">
       <div class="navbar-brand">
-        <div class="navbar-item is-size-4 is-family-monospace">Take Note</div>
+        <div
+          class="navbar-item is-size-4 is-family-monospace"
+          style="cursor: pointer"
+          @click="handleClickLogo"
+        >
+          Take Note
+        </div>
         <a
           role="button"
           class="navbar-burger"
@@ -38,12 +44,16 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 /**
  * Mobive Nav
  */
-
+const router = useRouter();
 const showMobileNav = ref(false);
+const handleClickLogo = () => {
+  router.push("/");
+};
 </script>
 
 <style scoped>

@@ -1,29 +1,16 @@
 <template>
   <div class="notes">
-    <div class="card has-background-success-dark p-4 mb-5">
-      <div class="field">
-        <div class="control">
-          <textarea
-            class="textarea"
-            placeholder="Add a new note"
-            v-model="newNote"
-            ref="newNoteRef"
-          ></textarea>
-        </div>
-      </div>
-
-      <div class="field is-grouped is-grouped-right">
-        <div class="control">
-          <button
-            class="button is-link has-background-success"
-            @click="addNote"
-            :disabled="!newNote"
-          >
-            Add New Note
-          </button>
-        </div>
-      </div>
-    </div>
+    <AddEditNote v-model="newNote" ref="addEditNoteRef">
+      <template #buttons>
+        <button
+          class="button is-link has-background-success"
+          @click="addNote"
+          :disabled="!newNote"
+        >
+          Add New Note
+        </button>
+      </template>
+    </AddEditNote>
     <SingleNote v-for="note in storeNotes.notes" :key="note.id" :note="note" />
   </div>
 </template>
@@ -31,17 +18,19 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import SingleNote from "@/components/Notes/SingleNote.vue";
+import AddEditNote from "@/components/Notes/AddEditNote.vue";
 import { useStoreNotes } from "@/stores/storeNotes";
 
 /**Store */
 const storeNotes = useStoreNotes();
 
 const newNote = ref("");
-const newNoteRef = ref<HTMLTextAreaElement | null>(null);
+const addEditNoteRef = ref<InstanceType<typeof AddEditNote> | null>(null);
+
 const addNote = () => {
   storeNotes.addNote(newNote.value);
   newNote.value = "";
-  newNoteRef.value?.focus();
+  addEditNoteRef.value?.focusTextarea();
 };
 </script>
 
