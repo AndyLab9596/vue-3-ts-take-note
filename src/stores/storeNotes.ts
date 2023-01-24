@@ -29,7 +29,7 @@ export const useStoreNotes = defineStore("storeNotes", {
         this.notes = notes;
       });
     },
-    async addNote(content: INote["content"]): Promise<void> {
+    async addNote(content: INote["content"]) {
       await setDoc(doc(notesCollection, new Date().getTime().toString()), {
         content,
       });
