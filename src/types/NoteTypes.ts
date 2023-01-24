@@ -3,4 +3,8 @@ interface INote {
   content: string;
 }
 
-export type { INote };
+interface IModal {
+  deleteNote: boolean;
+}
+
+export type { INote, IModal };
