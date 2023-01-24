@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
 import type { INote } from "@/types/NoteTypes";
+import { v4 as uuidv4 } from "uuid";
+
 /** */
 export const useStoreNotes = defineStore("storeNotes", {
   state: () => {
@@ -21,8 +23,12 @@ export const useStoreNotes = defineStore("storeNotes", {
     };
   },
   actions: {
-    addNote(note: INote): void {
-      this.notes.unshift(note);
+    addNote(content: INote["content"]): void {
+      const newOne = {
+        id: uuidv4(),
+        content,
+      };
+      this.notes.unshift(newOne);
     },
     deleteNote(id: INote["id"]): void {
       const deletedNoteIndex = this.notes.findIndex((note) => note.id === id);

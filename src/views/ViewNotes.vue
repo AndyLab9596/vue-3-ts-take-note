@@ -36,7 +36,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import type { INote } from "@/types/NoteTypes";
-import { v4 as uuidv4 } from "uuid";
 import SingleNote from "@/components/Notes/SingleNote.vue";
 import { useStoreNotes } from "@/stores/storeNotes";
 
@@ -46,11 +45,7 @@ const storeNotes = useStoreNotes();
 const newNote = ref("");
 const newNoteRef = ref<HTMLTextAreaElement | null>(null);
 const addNote = () => {
-  const newOne = {
-    id: uuidv4(),
-    content: newNote.value,
-  };
-  storeNotes.addNote(newOne);
+  storeNotes.addNote(newNote.value);
   newNote.value = "";
   newNoteRef.value?.focus();
 };
