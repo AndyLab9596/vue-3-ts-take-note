@@ -10,17 +10,22 @@
       <tbody>
         <tr>
           <td>Number of Notes</td>
-          <td>XXX</td>
+          <td>{{ storeNotes.totalNotesCount }}</td>
         </tr>
         <tr>
           <td>Number of Character (of all notes)</td>
-          <td>XXX</td>
+          <td>{{ storeNotes.totalCharactersCount }}</td>
         </tr>
       </tbody>
     </table>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useStoreNotes } from "@/stores/storeNotes";
+
+/**Store */
+const storeNotes = useStoreNotes();
+</script>
 
 <style scoped></style>
