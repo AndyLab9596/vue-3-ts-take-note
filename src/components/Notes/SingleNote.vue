@@ -3,8 +3,9 @@
     <div class="card-content">
       <div class="content">
         {{ note.content }}
-        <div class="has-text-right has-text-grey-light mt-2">
-          <small>
+        <div class="has-text-grey-light mt-2 columns is-mobile">
+          <small class="column">{{ noteDated }}</small>
+          <small class="column has-text-right">
             {{ contentLength }} character{{ contentLength > 1 ? "s" : "" }}
           </small>
         </div>
@@ -30,12 +31,20 @@
 import type { INote, IModal } from "@/types/NoteTypes";
 import { computed, reactive } from "vue";
 import ModalDeleteNote from "@/components/Notes/ModalDeleteNote.vue";
+import { useDateFormat } from "@vueuse/core";
 
 const props = defineProps<{
   note: INote;
 }>();
 
 const contentLength = computed(() => props.note.content.length);
+const noteDated = computed(() => {
+  const formattedDate = new Date(parseInt(props.note.date));
+  const resultDate = useDateFormat(formattedDate, "YYYY-MM-DD HH:mm:ss", {
+    locales: "en-US",
+  });
+  return resultDate;
+});
 
 /** Modals */
 const modals: IModal = reactive({

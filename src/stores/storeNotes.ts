@@ -16,10 +16,12 @@ export const useStoreNotes = defineStore("storeNotes", {
   state: () => {
     return {
       notes: [] as INote[],
+      notesLoaded: true as boolean,
     };
   },
   actions: {
     async getNotesFromFireStore() {
+      this.notesLoaded = false;
       const notesCollectionQuery = query(
         notesCollection,
         orderBy("date", "desc")
@@ -30,9 +32,11 @@ export const useStoreNotes = defineStore("storeNotes", {
           notes.push({
             id: doc.id,
             content: doc.data().content,
+            date: doc.data().date,
           });
         });
         this.notes = notes;
+        this.notesLoaded = true;
       });
     },
     async addNote(content: INote["content"]) {

@@ -1,6 +1,7 @@
 interface INote {
   id: string;
   content: string;
+  date: string;
 }
 
 interface IModal {
