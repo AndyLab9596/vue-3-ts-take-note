@@ -1,10 +1,14 @@
 <template>
-  <div class="card has-background-success-dark p-4 mb-5">
+  <div class="card p-4 mb-5" :class="`has-background-${props.bgColor}-dark`">
+    <label class="label has-text-white" v-if="props.label">
+      {{ props.label }}
+    </label>
+
     <div class="field">
       <div class="control">
         <textarea
           class="textarea"
-          placeholder="Add a new note"
+          :placeholder="props.placeHolder"
           ref="newNoteRef"
           v-model="localModelValue"
         ></textarea>
@@ -24,6 +28,9 @@ import { computed, ref } from "vue";
 
 const props = defineProps<{
   modelValue: string;
+  bgColor: string;
+  placeHolder: string;
+  label?: string;
 }>();
 
 const emits = defineEmits<{

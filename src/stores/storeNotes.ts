@@ -35,5 +35,16 @@ export const useStoreNotes = defineStore("storeNotes", {
       if (deletedNoteIndex < 0) return;
       this.notes.splice(deletedNoteIndex, 1);
     },
+    updateNote({ id, content }: INote): void {
+      const updatedNoteIndex = this.notes.findIndex((note) => note.id === id);
+      if (updatedNoteIndex < 0) return;
+      this.notes[updatedNoteIndex].content = content;
+    },
+  },
+  getters: {
+    getNoteById: (state) => {
+      return (noteId: INote["id"]) =>
+        state.notes.find((note) => note.id === noteId);
+    },
   },
 });

@@ -1,6 +1,11 @@
 <template>
   <div class="notes">
-    <AddEditNote v-model="newNote" ref="addEditNoteRef">
+    <AddEditNote
+      v-model="newNote"
+      ref="addEditNoteRef"
+      bg-color="success"
+      place-holder="Add a new note"
+    >
       <template #buttons>
         <button
           class="button is-link has-background-success"
