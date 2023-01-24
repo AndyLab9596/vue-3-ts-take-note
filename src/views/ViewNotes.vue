@@ -24,18 +24,12 @@
         </div>
       </div>
     </div>
-
-    <div class="card mb-4" v-for="note in notes" :key="note.id">
-      <div class="card-content">
-        <div class="content">
-          {{ note.content }}
-        </div>
-      </div>
-      <footer class="card-footer">
-        <a href="#" class="card-footer-item">Edit</a>
-        <a href="#" class="card-footer-item">Delete</a>
-      </footer>
-    </div>
+    <SingleNote
+      v-for="note in notes"
+      :key="note.id"
+      :note="note"
+      @delete-note="handleDeleteNote"
+    />
   </div>
 </template>
 
@@ -43,6 +37,7 @@
 import { ref } from "vue";
 import type { INote } from "@/types/NoteTypes";
 import { v4 as uuidv4 } from "uuid";
+import SingleNote from "@/components/Notes/SingleNote.vue";
 
 /**
  * Notes
@@ -72,6 +67,12 @@ const addNote = () => {
   notes.value.unshift(newOne);
   newNote.value = "";
   newNoteRef.value?.focus();
+};
+
+const handleDeleteNote = (id: INote["id"]) => {
+  const deletedNoteIndex = notes.value.findIndex((note) => note.id === id);
+  if (deletedNoteIndex < 0) return;
+  notes.value.splice(deletedNoteIndex, 1);
 };
 </script>
 
