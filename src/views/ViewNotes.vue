@@ -67,7 +67,7 @@ const addNote = () => {
     id: uuidv4(),
     content: newNote.value,
   };
-  notes.value.push(newOne);
+  notes.value.unshift(newOne);
   newNote.value = "";
 };
 </script>
