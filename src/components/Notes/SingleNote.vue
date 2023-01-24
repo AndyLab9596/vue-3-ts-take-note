@@ -22,18 +22,24 @@
 <script setup lang="ts">
 import type { INote } from "@/types/NoteTypes";
 import { computed } from "vue";
+import { useStoreNotes } from "@/stores/storeNotes";
+
+/**Store */
+const storeNotes = useStoreNotes();
 
 const props = defineProps<{
   note: INote;
 }>();
 
-const emits = defineEmits<{
-  (e: "delete-note", id: INote["id"]): void;
-}>();
+// const emits = defineEmits<{
+//   (e: "delete-note", id: INote["id"]): void;
+// }>();
 
 const contentLength = computed(() => props.note.content.length);
 const onDeleteNote = (id: INote["id"]) => {
-  emits("delete-note", id);
+  // emits("delete-note", id);
+  storeNotes.deleteNote(id);
+
 };
 </script>
 

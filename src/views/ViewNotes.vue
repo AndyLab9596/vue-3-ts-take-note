@@ -24,18 +24,12 @@
         </div>
       </div>
     </div>
-    <SingleNote
-      v-for="note in storeNotes.notes"
-      :key="note.id"
-      :note="note"
-      @delete-note="handleDeleteNote"
-    />
+    <SingleNote v-for="note in storeNotes.notes" :key="note.id" :note="note" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
-import type { INote } from "@/types/NoteTypes";
 import SingleNote from "@/components/Notes/SingleNote.vue";
 import { useStoreNotes } from "@/stores/storeNotes";
 
@@ -48,10 +42,6 @@ const addNote = () => {
   storeNotes.addNote(newNote.value);
   newNote.value = "";
   newNoteRef.value?.focus();
-};
-
-const handleDeleteNote = (id: INote["id"]) => {
-  storeNotes.deleteNote(id);
 };
 </script>
 
