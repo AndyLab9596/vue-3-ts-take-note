@@ -7,6 +7,7 @@
             class="textarea"
             placeholder="Add a new note"
             v-model="newNote"
+            ref="newNoteRef"
           ></textarea>
         </div>
       </div>
@@ -62,6 +63,7 @@ const notes = ref<INote[]>([
 ]);
 
 const newNote = ref("");
+const newNoteRef = ref<HTMLTextAreaElement | null>(null);
 const addNote = () => {
   const newOne = {
     id: uuidv4(),
@@ -69,6 +71,7 @@ const addNote = () => {
   };
   notes.value.unshift(newOne);
   newNote.value = "";
+  newNoteRef.value?.focus();
 };
 </script>
 
