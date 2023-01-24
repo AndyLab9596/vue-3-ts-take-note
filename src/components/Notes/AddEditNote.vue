@@ -11,6 +11,8 @@
           :placeholder="props.placeHolder"
           ref="newNoteRef"
           v-model="localModelValue"
+          v-autofocus
+          maxlength="100"
         ></textarea>
       </div>
     </div>
@@ -25,6 +27,7 @@
 
 <script setup lang="ts">
 import { computed, ref } from "vue";
+import { vAutofocus } from "@/directives/vAutofocus";
 
 const props = defineProps<{
   modelValue: string;
