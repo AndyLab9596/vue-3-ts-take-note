@@ -47,6 +47,13 @@
           >
             Stats
           </RouterLink>
+          <button
+            class="button is-small is-info mt-3 ml-3"
+            @click="onLogout"
+            v-if="storeAuth.user"
+          >
+            Log out {{ storeAuth.user.email }}
+          </button>
         </div>
       </div>
     </div>
@@ -57,6 +64,10 @@
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { onClickOutside } from "@vueuse/core";
+import { useStoreAuth } from "@/stores/storeAuth";
+
+/** Store */
+const storeAuth = useStoreAuth();
 
 /**
  * Mobive Nav
@@ -65,6 +76,11 @@ const router = useRouter();
 const showMobileNav = ref(false);
 const handleClickLogo = () => {
   router.push("/");
+};
+
+const onLogout = () => {
+  storeAuth.logOut();
+  showMobileNav.value = false;
 };
 
 /**Click Outsie to close */

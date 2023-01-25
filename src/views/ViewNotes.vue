@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import SingleNote from "@/components/Notes/SingleNote.vue";
 import AddEditNote from "@/components/Notes/AddEditNote.vue";
 import { useStoreNotes } from "@/stores/storeNotes";
@@ -57,6 +57,10 @@ const addNote = () => {
 };
 
 useWatchCharacters(newNote, 50);
+
+onMounted(() => {
+  storeNotes.getNotesFromFireStore();
+});
 </script>
 
 <style scoped></style>

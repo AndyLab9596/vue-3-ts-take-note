@@ -8,4 +8,14 @@ interface IModal {
   deleteNote: boolean;
 }
 
-export type { INote, IModal };
+interface ICredential {
+  email: string;
+  password: string;
+}
+
+interface IUser {
+  id: string;
+  email: string;
+}
+
+export type { INote, IModal, ICredential, IUser };
