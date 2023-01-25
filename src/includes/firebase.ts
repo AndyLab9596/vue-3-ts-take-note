@@ -21,6 +21,4 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
-const notesCollection = collection(db, "notes");
-
-export { db, notesCollection, auth };
+export { db, auth };

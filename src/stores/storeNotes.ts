@@ -1,5 +1,5 @@
-import { notesCollection } from "@/includes/firebase";
-import type { INote } from "@/types/NoteTypes";
+import { useStoreAuth } from "./storeAuth";
+import type { INote, IUser } from "@/types/NoteTypes";
 import {
   deleteDoc,
   doc,
@@ -8,8 +8,18 @@ import {
   updateDoc,
   query,
   orderBy,
+  collection,
 } from "firebase/firestore";
+import type {
+  DocumentData,
+  CollectionReference,
+  Unsubscribe,
+} from "firebase/firestore";
+import { db } from "@/includes/firebase";
 import { defineStore } from "pinia";
+
+let notesCollection: CollectionReference<DocumentData> | null = null;
+let getNotesSnapshot: Unsubscribe | null = null;
 
 /** */
 export const useStoreNotes = defineStore("storeNotes", {
@@ -20,13 +30,28 @@ export const useStoreNotes = defineStore("storeNotes", {
     };
   },
   actions: {
+    async init() {
+      const storeAuth = useStoreAuth();
+      // initialize our database refs
+      notesCollection = collection(
+        db,
+        "users",
+        (storeAuth.user as IUser).id,
+        "notes"
+      );
+      await this.getNotesFromFireStore();
+    },
     async getNotesFromFireStore() {
       this.notesLoaded = false;
       const notesCollectionQuery = query(
-        notesCollection,
+        notesCollection as CollectionReference<DocumentData>,
         orderBy("date", "desc")
       );
-      onSnapshot(notesCollectionQuery, (querySnapshot) => {
+
+      /** Unsubscribe from an active listener */
+      if (getNotesSnapshot) getNotesSnapshot();
+
+      getNotesSnapshot = onSnapshot(notesCollectionQuery, (querySnapshot) => {
         const notes: INote[] = [];
         querySnapshot.forEach((doc) => {
           notes.push({
@@ -41,18 +66,26 @@ export const useStoreNotes = defineStore("storeNotes", {
     },
     async addNote(content: INote["content"]) {
       const date = new Date().getTime().toString();
-      await addDoc(notesCollection, {
+      await addDoc(notesCollection as CollectionReference<DocumentData>, {
         content,
         date,
       });
     },
     async deleteNote(id: INote["id"]) {
-      await deleteDoc(doc(notesCollection, id));
+      await deleteDoc(
+        doc(notesCollection as CollectionReference<DocumentData>, id)
+      );
     },
-    async updateNote({ id, content }: INote) {
-      await updateDoc(doc(notesCollection, id), {
-        content,
-      });
+    async updateNote({ id, content }: Omit<INote, "date">) {
+      await updateDoc(
+        doc(notesCollection as CollectionReference<DocumentData>, id),
+        {
+          content,
+        }
+      );
+    },
+    clearNotes() {
+      this.notes = [];
     },
   },
   getters: {

@@ -1,3 +1,4 @@
+import { useStoreNotes } from "./storeNotes";
 import { auth } from "@/includes/firebase";
 import type { ICredential, IUser } from "@/types/NoteTypes";
 import { defineStore } from "pinia";
@@ -17,6 +18,8 @@ export const useStoreAuth = defineStore("storeAuth", {
   },
   actions: {
     async init() {
+      const notesStore = useStoreNotes();
+
       onAuthStateChanged(auth, (user) => {
         if (user) {
           const userObj: IUser = {
@@ -25,11 +28,13 @@ export const useStoreAuth = defineStore("storeAuth", {
           };
           this.user = userObj;
           this.router.push("/");
+          notesStore.init();
           // ...
         } else {
           // User is signed out
           // ...
           this.user = null;
+          notesStore.clearNotes();
           this.router.replace("/auth");
           console.log("logout", user, this.user);
         }
