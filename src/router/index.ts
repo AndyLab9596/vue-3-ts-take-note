@@ -1,10 +1,9 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { useStoreAuth } from "@/stores/storeAuth";
+import ViewAuth from "@/views/ViewAuth.vue";
+import ViewEditNote from "@/views/ViewEditNote.vue";
 import ViewNotes from "@/views/ViewNotes.vue";
 import ViewStats from "@/views/ViewStats.vue";
-import ViewEditNote from "@/views/ViewEditNote.vue";
-import ViewAuth from "@/views/ViewAuth.vue";
-import { useStoreAuth } from "@/stores/storeAuth";
-import type { IUser } from "@/types/NoteTypes";
+import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
   {
